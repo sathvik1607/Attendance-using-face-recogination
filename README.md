@@ -1,4 +1,4 @@
-# Face Attendance System
+# Attendence Using Face Recognition
 
 Setup guide for running the project locally using Python 3.11.
 
