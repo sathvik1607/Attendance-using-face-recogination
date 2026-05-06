@@ -1,6 +1,6 @@
 # Face Attendance System
 
-Production-ready setup guide for running the project locally using Python 3.11.
+Setup guide for running the project locally using Python 3.11.
 
 ---
 
@@ -66,6 +66,7 @@ project-root/
 ├── backend/
 │   ├── main.py
 │   ├── requirements.txt
+│   ├── .env
 │   ├── routes/
 │   ├── uploads/
 │   ├── database.py
@@ -83,22 +84,27 @@ project-root/
 
 # STEP 1 — Install Python 3.11
 
-## Windows
+## Windows (Recommended Method)
 
-Download Python 3.11 from:
+Install Python 3.11 directly using winget:
 
-[https://www.python.org/downloads/release/python-3119/](https://www.python.org/downloads/release/python-3119/)
-
-IMPORTANT:
-During installation:
-
-✔ Check:
-
-```text
-Add Python to PATH
+```cmd
+winget install -e --id Python.Python.3.11
 ```
 
-After installation verify:
+After installation verify available Python versions:
+
+```cmd
+py -0
+```
+
+Expected output should include:
+
+```text
+-V:3.11
+```
+
+Verify Python 3.11 works:
 
 ```cmd
 py -3.11 --version
@@ -107,8 +113,17 @@ py -3.11 --version
 Expected:
 
 ```text
-Python 3.11.9
+Python 3.11.x
 ```
+
+Using winget automatically handles:
+
+* PATH setup
+* installer configuration
+* registry setup
+* launcher integration
+
+No manual PATH configuration is required.
 
 ---
 
@@ -132,25 +147,35 @@ python3.11 --version
 
 ## Windows
 
-Download PostgreSQL 16:
+Download PostgreSQL:
 
 [https://www.postgresql.org/download/windows/](https://www.postgresql.org/download/windows/)
 
 During installation:
 
-Remember:
+IMPORTANT:
 
-* username
-* password
-* port
-
-Recommended:
+Select:
 
 ```text
-Port: 5433
+PostgreSQL 16
 ```
 
-Install pgAdmin when prompted.
+Also install:
+
+* pgAdmin
+* Command Line Tools
+
+Recommended configuration:
+
+| Setting  | Value    |
+| -------- | -------- |
+| Username | postgres |
+| Port     | 5432     |
+
+Remember the password you create during setup.
+
+pgAdmin is required for easier database management.
 
 ---
 
@@ -166,11 +191,11 @@ brew services start postgresql@16
 # STEP 3 — Clone Repository
 
 ```bash
-git clone <YOUR_REPO_URL>
+git clone https://github.com/sathvik1607/Attendance-using-face-recogination.git
 ```
 
 ```bash
-cd <REPO_FOLDER>
+cd Attendance-using-face-recogination
 ```
 
 ---
@@ -233,13 +258,31 @@ Install locked dependencies:
 pip install -r requirements.txt
 ```
 
+---
+
 ## macOS
+
+Before installation, remove Windows-only dependency from requirements.txt:
+
+```text
+pywin32==311
+```
+
+Then install:
 
 ```bash
 pip install -r requirements.txt
 ```
 
 This may take several minutes because TensorFlow and DeepFace are large packages.
+
+TensorFlow startup warnings like:
+
+```text
+oneDNN custom operations are on
+```
+
+are normal and NOT errors.
 
 ---
 
@@ -254,12 +297,10 @@ Inside backend folder create:
 Add:
 
 ```env
-DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5433/face_auth
+DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/face_auth
 CONFIDENCE_THRESHOLD=0.40
 MATCH_THRESHOLD=0.55
 LIVENESS_CHECK=False
-ADMIN_EMAIL=admin@gmail.com
-ADMIN_PASSWORD=admin123
 ```
 
 Replace:
@@ -274,9 +315,21 @@ with your PostgreSQL password.
 
 # STEP 8 — Create PostgreSQL Database
 
-Open pgAdmin or psql.
+Open pgAdmin.
 
-Create database:
+Create a database named:
+
+```text
+face_auth
+```
+
+Or use psql:
+
+```bash
+psql -U postgres -p 5432
+```
+
+Then run:
 
 ```sql
 CREATE DATABASE face_auth;
@@ -311,6 +364,7 @@ http://127.0.0.1:8000/docs
 ```
 
 ---
+##Currently this step is unnecessary if we have separate repos then the following will have thier own changes
 
 # STEP 10 — Setup Frontend
 
@@ -413,7 +467,7 @@ pip freeze > requirements.txt
 Open psql:
 
 ```bash
-psql -U postgres -p 5433
+psql -U postgres -p 5432
 ```
 
 Switch DB:
