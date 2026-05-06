@@ -297,16 +297,28 @@ Inside backend folder create:
 Add:
 
 ```env
+# PostgreSQL Database URL
 DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/face_auth
+
+# Face Recognition Thresholds
 CONFIDENCE_THRESHOLD=0.40
 MATCH_THRESHOLD=0.55
+
+# Liveness Detection
 LIVENESS_CHECK=False
+
+# Admin Bootstrap Credentials
+ADMIN_EMAIL=admin@gmail.com
+ADMIN_PASSWORD=admin@1234
+#For JWT and other security-related features, ensure to change this 
+SECRET_KEY=your_secret_key_here
 ```
 
 Replace:
 
 ```text
 YOUR_PASSWORD
+your_secret_key_here
 ```
 
 with your PostgreSQL password.
